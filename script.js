@@ -1,7 +1,7 @@
 //Things to note:
 //javascript requires ";" after each line/function.
 //=== means equal.
-//hell
+//hello
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];                                            //grabbing the data from local storage and the using JSON.parse to convert the string to an array. If the no array is found then we use an empty array instead that's the purpose or adding ||(or) [](empty array)
 tasks.forEach(function(task) {
