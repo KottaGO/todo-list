@@ -149,3 +149,9 @@ body {
     }
 }
 
+/* Style for completed tasks */
+input[type="checkbox"]:checked + .task-text {
+    text-decoration: line-through;
+    color: grey;
+    opacity: 0.7;
+}
