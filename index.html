@@ -12,6 +12,11 @@
         <div class="container">                                                                         
             <h1>My To-Do List</h1>                                                                      <!--This allows for css to apply to everything in this class-->
             <input type="text" id="taskInput" placeholder="Enter a task...">                            <!--<input> creates a textbox, type refers to the kind of data you want (google different types depending on what you want e.g. "number" only allows numbers)), id is used for javascript to identify this line, placeholder is what is displayed before the user inputs data-->
+            <select id="prioritySelect">                                                                <!--Dropdown list for task priority selection-->
+                <option value="2" selected>Normal</option>
+                <option value="3">High</option>
+                <option value="1">Low</option>
+            </select>
             <button id="addButton">Add Task</button>                                                    <!--<button> makes a button duh! id allows javascript to find this line-->
             <ul id="taskList"></ul>                                                                     <!--<ul> stand for unordered list. Why use an unordered list? Like a shopping list, there is no point of numbering the items. If you want an ordered list use <ol> and it will add numbers for each item.-->
         </div>

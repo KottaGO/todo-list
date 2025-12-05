@@ -155,3 +155,17 @@ input[type="checkbox"]:checked + .task-text {
     color: grey;
     opacity: 0.7;
 }
+
+/* PRIORITY COLORS 
+.priority-high {
+    background-color: #ffe5e5; /* light red 
+}
+
+.priority-normal {
+    background-color: #ffffff; /* white 
+}
+
+.priority-low {
+    background-color: #e5f0ff; /* light blue 
+}
+*/
