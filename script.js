@@ -13,14 +13,17 @@ let tasks = Array.isArray(raw) ? raw.map(item => {
             id: Date.now() + Math.floor(Math.random() * 1000), 
             text: item,
             done: false,
-            priority: 2 //is this right?
+            important: false, //is this right?
+            urgent: false
          };
     } else {
         return {
             id: item.id || (Date.now() + Math.floor(Math.random() * 1000)),
             text: item.text || '',
             done: item.done,
-            priority: typeof item.priority === "number" ? item.priority : 2     // If item.priority exists and is a number, use it. Otherwise default to Normal = 2.
+            important: item.important,
+            urgent: item.urgent,
+            value: parseInt(important) + parseInt(urgent)
 
         };
     }
@@ -29,11 +32,35 @@ let tasks = Array.isArray(raw) ? raw.map(item => {
 //the sort function will sort the array by comparing two values. If b.priority is bigger than a.priority then it will return a positive number which will tell the sort function that the "b" value should come first and the "a" value should come after.
 function sortTasks() {
     tasks.sort((a,b) => {
-        if (b.priority !== a.priority) {
-            return b.priority - a.priority
+        if (a.value === 7) {
+            return 1;
         }
-        return b.id - a.id;
     });
+
+    tasks.sort((a,b) => {
+        if (a.value === 3) {
+            return 1;
+        }
+    });
+
+    tasks.sort((a,b) => {
+        if (a.value === 9) {
+            return 1;
+        }
+    });
+
+    tasks.sort((a,b) => {
+        if (a.value === 5) {
+            return 1;
+        }
+    });
+}
+
+function computeQuad(important, urgent) {
+    if (important && urgent) return 1;
+    if (important && !urgent) return 2;
+    if (!important && urgent) return 3;
+    return 4;
 }
 
 //using local storage to load data
@@ -41,15 +68,14 @@ sortTasks();
 tasks.forEach(task => addTaskToDOM(task));
 
 //Create a task
-function createTask(userInput) {
-
-    const priorityNum = parseInt(document.getElementById("prioritySelect").value);                                     //get priority selection from user input, defult is normal
-
+function createTask(userInput, important, urgent) {
     return {
         id: Date.now() + Math.floor(Math.random() * 1000),
         text: userInput,
         done: false,
-        priority: priorityNum
+        important: important,
+        urgent: urgent,
+        value: computeQuad(important, urgent)
     };
 }
 
@@ -125,8 +151,13 @@ function addTaskToDOM(task) {
 document.getElementById("addButton").addEventListener("click", function() {                         //in the document (html file) find the element "addButton" and if someone clicks the button run the function.
     let task = document.getElementById("taskInput").value;                                          //this is the function. It is assigning the variable task with the user input.
     if (task === "") return;                                                                        //To prevent blank tasks from being added. 
+
+    let importance = document.getElementById("important").value;
+    //if nothing selected then the dropbox should flash red
+    let urgency = document.getElementById("urgent").value;
+    //if nothing selected then the dropbox should flash red
     
-    task = createTask(task);
+    task = createTask(task, importance, urgency);
     tasks.push(task);                                                                               //pushing the user data to the tasks array for local storage
     sortTasks();
     localStorage.setItem("tasks", JSON.stringify(tasks));                                           //saves the task array to local storage as each item is added.
