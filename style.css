@@ -37,8 +37,8 @@ h1 {
     letter-spacing: 0.2em;
     text-transform: uppercase;
 
-    color: #2e8b57;
-    opacity: 0.15;                  /* key: subtle */
+    color: #9ba19e;
+    opacity: 0.35;                  /* key: subtle */
     
     pointer-events: none;           /* clicks go through */
     user-select: none;
@@ -134,7 +134,8 @@ body {
 
 .axis-top {
     position: absolute;
-    top: -25px;          /* sits just outside the grid */
+    transform: translateY(-165%);
+    top: 0px;          /* sits just outside the grid */
     left: 0;
     width: 100%;
 
@@ -149,7 +150,8 @@ body {
 
 .axis-left {
     position: absolute;
-    left: calc(-64px - 18px);         /* sits just outside grid */
+    left: 0;         /* sits just outside grid */
+    transform: translateX(-65%);
     top: 0;
     height: 100%;
 
@@ -325,7 +327,7 @@ body {
 }
 
 /* Style for completed tasks (use `.task-completed` on the list item or container) */
-.task-completed .task-text {
+.completed .task-text {
     text-decoration: line-through;  /* strike-through text */
     color: #6c757d;                 /* muted gray */
     opacity: 0.75;                  /* slightly faded */

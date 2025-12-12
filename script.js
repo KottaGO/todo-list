@@ -67,16 +67,6 @@ function addTaskToDOM(task) {
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);                //Store unique id for reference
     li.classList.toggle('completed', task.done);        //Add 'completed' class if task is done
-
-    //adding priority visual cues
-    //if (task.priority === 3) {
-    //    li.classList.add("priority-high");
-    //} else if (task.priority === 2) {
-    //    li.classList.add("priority-normal");
-   // } else if (task.priority === 1) {
-    //    li.classList.add("priority-low");
-    //}
-
     
     //Create a label or span to display the task text. what is the difference between a label and span???
     const taskSpan = document.createElement('span');
