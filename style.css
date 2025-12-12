@@ -2,7 +2,7 @@
 /* "#" is used to select a id and "." is used to select a class. */
 /* page layout */
 .container {
-    max-width: 400px;  /* limits width to 400 pixels */
+    max-width: 480px;  /* slightly wider controls area */
     margin: auto;  /* centers the container horizontally */
     padding: 20px;  /* adds 20px space inside container on all sides */
     background-color: #e3f6ea;  /* slightly darker soft green tint for the card */
@@ -12,12 +12,41 @@
     margin-top: 20px;  /* adds space from top */
 }
 
+.input-layout {
+    display: flex;
+    align-items: flex-start; /* instead of stretch */
+    gap: 12px;
+}
+
 /* title */
 h1 {
     text-align: center;  /* centers the text */
     color: #333;  /* dark color so title is visible on the white card */
     margin-bottom: 20px;  /* adds 20px space below the title */
 }
+
+.quad-bg {
+    position: absolute;
+    inset: 0;                       /* fill the quadrant */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+
+    color: #2e8b57;
+    opacity: 0.15;                  /* key: subtle */
+    
+    pointer-events: none;           /* clicks go through */
+    user-select: none;
+
+    z-index: 0;                     /* behind tasks */
+}
+
+
 
 /* input field */
 #taskInput {
@@ -27,7 +56,7 @@ h1 {
     border: 2px solid #cfe9d8;  /* soft green border to match theme */
     border-radius: 8px;  /* rounds the corners */
     box-sizing: border-box;  /* keeps total width at 100% even with padding */
-    margin-bottom: 10px;  /* adds 10px space below input */
+    margin-bottom: 0px;  /* adds 10px space below input */
     transition: border-color 0.3s ease;  /* smoothly changes border color over 0.3 seconds */
 }
 
@@ -38,18 +67,47 @@ h1 {
     box-shadow: 0 4px 12px rgba(46, 139, 87, 0.08);  /* subtle green glow */
 }
 
+.drop-box {
+    padding: 12px 40px 12px 12px; /* extra right padding */
+    font-size: 15px;
+    border: 2px solid #cfe9d8;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    height: 48px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%232e8b57' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px;
+}
+
+.drop-box:focus {
+    outline: none;
+    border-color: #2e8b57;
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.08);
+}
+
 /* add button */
 #addButton {
-    width: 100%;  /* full width to match input */
-    padding: 12px;  /* adds 12px space inside button */
-    background-color: #2e8b57;  /* green main button color */
-    color: white;  /* makes text white */
-    border: none;  /* removes default border */
-    border-radius: 8px;  /* rounds the corners */
-    font-size: 16px;  /* makes text bigger */
-    cursor: pointer;  /* changes cursor to hand when hovering */
-    margin-bottom: 20px;  /* adds 20px space below button */
-    transition: background-color 0.3s ease, transform 0.2s ease;  /* smooth color and movement changes */
+    width: 100%;
+    padding: 12px;
+
+    background-color: #2e8b57;
+    color: white;
+    border: none;
+    border-radius: 8px;
+
+    font-size: 16px;
+    cursor: pointer;
+
+    margin-top: 6px;
+
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* add button hover effect - when mouse is over the button */
@@ -68,29 +126,146 @@ body {
     color: #13361a; /* default text color (dark green) */
 }
 
-/* the list */
-#taskList {
-    padding: 0;  /* removes default padding from list */
+.matrix-wrapper {
+    position: relative;
+    max-width: 960px;
+    margin: 40px auto;
 }
 
-/* each task item - the <li> container holding both text and delete button */
-#taskList li {
+.axis-top {
+    position: absolute;
+    top: -25px;          /* sits just outside the grid */
+    left: 0;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: #6c757d;
+}
+
+.axis-left {
+    position: absolute;
+    left: calc(-64px - 18px);         /* sits just outside grid */
+    top: 0;
+    height: 100%;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: #6c757d;
+}
+
+.axis-left span {
+    transform: rotate(-90deg);
+    white-space: nowrap;
+}
+
+.left-input {
+    flex: 1;              /* input gets most space */
+}
+
+.right-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 180px;
+}
+
+
+/* Quadrant grid - container that holds the four lists */
+.quadrants {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* two columns */
+    grid-auto-rows: 1fr;
+    gap: 18px;
+    position: relative; /* for pseudo-element grid lines */
+}
+
+/* draw subtle grid dividers (one vertical and one horizontal) centered through the grid */
+.quadrants::before,
+.quadrants::after {
+    content: "";
+    position: absolute;
+    background: rgba(16,86,53,0.06); /* faint green divider */
+    z-index: 1; /* behind quadrant content which will be z-index:2 */
+    pointer-events: none;
+}
+.quadrants::before { /* vertical line */
+    width: 1px;
+    top: 12px;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-0.5px);
+}
+.quadrants::after { /* horizontal line */
+    height: 1px;
+    left: 12px;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-0.5px);
+}
+
+/* Make quadrants stack on narrow screens */
+@media (max-width: 720px) {
+    .quadrants {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Each quadrant (Q1..Q4) */
+.quadrant {
+    background-color: transparent; /* make the outer grid area the visual card */
+    border: none; /* rely on the framed grid wrapper and dividing lines */
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 200px;
+    position: relative;
+    overflow: visible;
+    z-index: 2; /* sit above the ::before/::after grid dividers */
+}
+
+/* the list inside a quadrant */
+.quadrant ul {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quadrant li {
     display: flex;  /* arranges children (text and button) in a row */
     justify-content: space-between;  /* spreads items apart */
     align-items: center;  /* aligns items vertically in the middle */
-    gap: 12px;  /* adds 12px space between task text and delete button */
-
-    margin-bottom: 12px;  /* adds 12px space below each task */
+    gap: 12px;  /* adds space between task text and buttons */
+    margin-bottom: 12px;  /* adds space below each task */
 }
 
-/* task text container - the white box containing the task text */
-#taskList span {
-    background-color: white;  /* white background */
-    border-radius: 12px;  /* rounded corners */
-    padding: 12px 16px;  /* 12px top/bottom, 16px left/right padding */
-    flex: 1;  /* takes up all available space (grows to fill) */
-    box-shadow: 0 4px 8px rgba(16, 86, 53, 0.06);  /* subtle green-tinted shadow for depth */
-    transition: transform 0.2s ease, opacity 0.3s ease;  /* smooth animation when removed */
+/* task text box used in quadrants */
+.quadrant .task-text {
+    background-color: white;  /* keep individual tasks as white cards */
+    border-radius: 14px;  /* slightly more rounded for task cards */
+    padding: 14px 16px;  /* internal spacing */
+    flex: 1;  /* takes up remaining space */
+    box-shadow: 0 6px 18px rgba(16, 86, 53, 0.06);  /* slightly stronger shadow for task cards */
+    transition: transform 0.18s ease, opacity 0.2s ease;
+}
+
+/* Grid wrapper: a framed panel that contains the quadrants grid */
+.grid-wrapper {
+    max-width: 920px; /* wider than the input container */
+    margin: 36px auto 0; /* bigger gap between controls and grid */
+    background-color: #ffffff; /* white framed box */
+    border-radius: 16px;
+    padding: 18px; /* inner padding so quadrants don't touch edges */
+    box-shadow: 0 12px 30px rgba(16,86,53,0.06);
 }
 
 /* delete button */
@@ -149,9 +324,11 @@ body {
     }
 }
 
-/* Style for completed tasks */
-input[type="checkbox"]:checked + .task-text {
-    text-decoration: line-through;
-    color: grey;
-    opacity: 0.7;
+/* Style for completed tasks (use `.task-completed` on the list item or container) */
+.task-completed .task-text {
+    text-decoration: line-through;  /* strike-through text */
+    color: #6c757d;                 /* muted gray */
+    opacity: 0.75;                  /* slightly faded */
+    background-color: #f0f3f1;      /* subtle gray background */
+    box-shadow: 0 2px 6px rgba(16,86,53,0.03); /* reduced shadow */
 }

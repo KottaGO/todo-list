@@ -10,27 +10,75 @@
     <!--the body section is what is displayed on the webpage-->
     <body>
         <div class="container">                                                                         
-            <h1>My To-Do List</h1>                                                                      <!--This allows for css to apply to everything in this class-->
-            <input type="text" id="taskInput" placeholder="Enter a task...">                            <!--<input> creates a textbox, type refers to the kind of data you want (google different types depending on what you want e.g. "number" only allows numbers)), id is used for javascript to identify this line, placeholder is what is displayed before the user inputs data-->
-            <select id="important" class="drop-box" placeholder="Select task importance...">                                <!--Dropdown list for task importance selection-->
-                <option value="true" selected>Important</option>
-                <option value="false">Not Imporant</option>
-            </select>
-            <select id="urgent" class="drop-box" placeholder="Select task urgency...">                                <!--Dropdown list for task urgency selection-->
-                <option value="true" selected>Urgent</option>
-                <option value="false">Not Urgent</option>
-            </select>
-            <button id="addButton">Add Task</button>                                                    <!--<button> makes a button duh! id allows javascript to find this line-->
+            <h1>My To-Do List</h1>
             
+            <!-- Input row: Text on left, dropdowns on right -->
+            <div class="input-layout">
+
+                <!-- Left: Task input-->
+                <div class="left-input">                                                                    <!--This allows for css to apply to everything in this class-->
+                    <input type="text" id="taskInput" placeholder="Enter a task...">                        <!--<input> creates a textbox, type refers to the kind of data you want (google different types depending on what you want e.g. "number" only allows numbers)), id is used for javascript to identify this line, placeholder is what is displayed before the user inputs data-->
+                </div>
+                
+                <!-- Right: Dropdowns stacked-->
+                <div class="right-input">
+                    <select id="important" class="drop-box" placeholder="Select task importance...">                                <!--Dropdown list for task importance selection-->
+                        <option value="true" selected>Important</option>
+                        <option value="false">Not Important</option>
+                    </select>
+                    <select id="urgent" class="drop-box" placeholder="Select task urgency...">                                <!--Dropdown list for task urgency selection-->
+                        <option value="true" selected>Urgent</option>
+                        <option value="false">Not Urgent</option>
+                    </select>
+                </div>                
+            </div>
+                <!-- Add task button below -->
+                <button id="addButton">Add Task</button>  
+        </div>                                              
+
+
+        <div class="matrix-wrapper">
+
+            <!-- Top axis-->
+            <div class="axis-top">
+                <span>URGENT</span>
+                <span>NOT URGENT</span>
+            </div>
+
+            <!-- Left axis -->
+             <div class="axis-left">
+                <span>IMPORTANT</span>
+                <span>NOT IMPORTANT</span>
+            </div>
+
+            <div class="grid-wrapper">
+                <div class="quadrants">
+                    <div class="quadrant" id="quad-q1">
+                        <div class="quad-bg">DO</div>
+                        
+                        <ul id="q1" class="list1"></ul>
+                    </div>
+
+                    <div class="quadrant" id="quad-q2">
+                        <div class="quad-bg">DECIDE</div>
+                        
+                        <ul id="q2" class="list2"></ul>
+                    </div>
+
+                    <div class="quadrant" id="quad-q3">
+                        <div class="quad-bg">DELEGATE</div>
+                        
+                        <ul id="q3" class="list3"></ul>
+                    </div>
+
+                    <div class="quadrant" id="quad-q4">
+                        <div class="quad-bg">DELETE</div>
+
+                        <ul id="q4" class="list4"></ul>
+                    </div>
+                </div>
         </div>
 
-        <div>
-            <ul id="q1" class = "list1"></ul>                                                                     <!--<ul> stand for unordered list. Why use an unordered list? Like a shopping list, there is no point of numbering the items. If you want an ordered list use <ol> and it will add numbers for each item.-->
-            <ul id="q2" class = "list2"></ul>
-            <ul id="q3" class = "list3"></ul>
-            <ul id="q4" class = "list4"></ul>
-        </div>
-    
         <script src="script.js"></script>                                                               <!--this tells the html doc to use the script.js file to add javascript to the webpage. scr stand for source... its activating the specific file, WHICH MUST BE LOCATED IN THE SAME FOLDER AS THE HTML FILE UNLESS YOU WRITE A FILE PATHWAY!!!-->
 
     </body>
