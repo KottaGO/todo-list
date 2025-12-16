@@ -44,6 +44,17 @@ function computeQuad(important, urgent) {
     return 4;
 }
 
+// Calculating important and urgent from quadrant
+function computeFromQuad(quadrant) {
+    switch (quadrant) {
+        case 1: return { important: true, urgent: true };
+        case 2: return { important: true, urgent: false };
+        case 3: return { important: false, urgent: true};
+        case 4: return { important: false, urgent: false };
+        default: return { important: false, urgent: false };
+    }
+}
+
 //Create a task
 function createTask(userInput, important, urgent) {
     return {
@@ -86,6 +97,11 @@ for (let i = 1; i <= 4; i++) {
 
         // 2. update task.quadrant = i
         task.quadrant = i;
+
+        //2.5 recalculate important and urgent attributes
+        const updateTask = computeFromQuad(i);
+        task.important = updateTask.important;
+        task.urgent = updateTask.urgent;
 
         // 3. save
         localStorage.setItem("tasks", JSON.stringify(tasks));
