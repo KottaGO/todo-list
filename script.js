@@ -8,6 +8,7 @@ let raw = JSON.parse(localStorage.getItem("tasks"));
 
 //Drag and drop logic
 let draggedTaskId = null;
+let insertIndex = null;
 
 //Need to relearn how this code works
 let tasks = Array.isArray(raw) ? raw.map(item => {
@@ -81,8 +82,26 @@ for (let i = 1; i <= 4; i++) {
     quadrant.addEventListener("dragover", function (event) {
         event.preventDefault(); // required
         quadrant.classList.add("drag-over");
-    });
 
+        const mouseY = event.clientY;
+        const items = quadrant.querySelectorAll("li");
+
+        // Always insert at the end of items array (default behaviour)
+        insertIndex = items.length;
+
+        items.forEach((li, index) => {
+            const rect = li.getBoundingClientRect();            // finding the position of each li
+            const middle = rect.top + rect.height / 2;          // finding the mid point
+
+            // if mouse is above the middle then insert before, loops ends because insertIndex != items.length anymore
+            if (mouseY < middle && insertIndex === items.length) {
+                insertIndex = index;
+            }
+        });
+            
+        console.log("Quadrant:", i, "Insert index:", insertIndex);
+    });
+        
     quadrant.addEventListener("dragleave", () => {
         quadrant.classList.remove("drag-over");
     });
@@ -97,12 +116,31 @@ for (let i = 1; i <= 4; i++) {
 
         // 2. update task.quadrant = i
         task.quadrant = i;
-
+        
+    
         //2.5 recalculate important and urgent attributes
         const updateTask = computeFromQuad(i);
         task.important = updateTask.important;
         task.urgent = updateTask.urgent;
 
+        // Change data
+        // Remove the dragged task from tasks array
+        const oldIndex = tasks.indexOf(task);
+        tasks.splice(oldIndex, 1);
+
+        // Place task in the right order in tasks array
+        // Find the first task in the quadrant
+        const firstIndexInTasks = tasks.findIndex(t => t.quadrant === i);
+
+        // Calculate index position
+        // Special case: if insertIndex is null for some reason...
+        if (insertIndex === null) {
+            insertIndex = tasks.filter(t => t.quadrant === i).length;
+        }
+
+        const finalIndex = firstIndexInTasks === -1 ? tasks.length : firstIndexInTasks + insertIndex;
+
+        tasks.splice(finalIndex, 0, task);
         // 3. save
         localStorage.setItem("tasks", JSON.stringify(tasks));
 
@@ -111,6 +149,8 @@ for (let i = 1; i <= 4; i++) {
         draggedTaskId = null;
     });
 }
+
+
 
 //End testing
 
@@ -125,6 +165,7 @@ function addTaskToDOM(task) {
             return;
         }
         draggedTaskId = task.id;
+        insertIndex = null;
         li.classList.add("task-dragging");
         //console.log("Drag started:", draggedTaskId);
     });
